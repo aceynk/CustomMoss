@@ -240,7 +240,7 @@ public class Tree_draw_Patches
             .Insert(
                 new CodeInstruction(OpCodes.Ldarg_0),
                 new CodeInstruction(OpCodes.Call,
-                    AccessTools.Method(typeof(TranspilerSupplementary), nameof(TranspilerSupplementary.StumpDraw)))
+                    AccessTools.Method(typeof(TranspilerSupplementary), nameof(TranspilerSupplementary.TreeDraw)))
             );
 
         return cMatcher.InstructionEnumeration();
@@ -266,7 +266,10 @@ public class TranspilerSupplementary
                 if (sourceRectangle is not null)
                 {
                     Rectangle tempRect = (Rectangle)sourceRectangle;
-                    tempRect.X = 96;
+                    if (Game1.currentSeason != "winter")
+                    {
+                        tempRect.X += 96;
+                    }
                     sourceRectangle = tempRect;
                 }
             }
@@ -321,130 +324,6 @@ public class TranspilerSupplementary
         spriteBatch.Draw(textureValue, position, sourceRectangle, color, rotation, origin, scale, effects,
                 layerDepth);
     }
-    
-    public static void StumpDraw(SpriteBatch spriteBatch, Texture2D texture, Vector2 position,
-        Rectangle? sourceRectangle, Color color, float rotation, Vector2 origin, float scale, SpriteEffects effects,
-        float layerDepth, Tree curInstance)
-    {
-        string treeUID = "aceynk.CustomMoss/Tree";
-
-        if (curInstance.modData.ContainsKey(treeUID))
-        {
-            Dictionary<string, string> modDict = helper.DecodeModData(curInstance.modData[treeUID]);
-            Dictionary<string, Dictionary<string, string>> mossData =
-                Game1.content.Load<Dictionary<string, Dictionary<string, string>>>(treeUID);
-            
-            void dealWithRectangle()
-            {
-                if (sourceRectangle is not null)
-                {
-                    Rectangle tempRect = (Rectangle)sourceRectangle;
-                    tempRect.X += 96;
-                    sourceRectangle = tempRect;
-                }
-            }
-            
-            void evalTreeTexture(string textureKey)
-            {
-                if (mossData[modDict["current_moss"]].ContainsKey(textureKey))
-                {
-                    texture = Game1.content.Load<Texture2D>(mossData[modDict["current_moss"]][textureKey]);
-                }
-                else
-                {
-                    dealWithRectangle();
-                }
-            }
-            
-            if (!mossData.ContainsKey(modDict["current_moss"]))
-            {
-                modDict["current_moss"] = "null";
-            }
-            
-            //ModEntry.Log(((Rectangle)sourceRectangle).X + "," + ((Rectangle)sourceRectangle).Y);
-
-            if (modDict["current_moss"] != "null")
-            {
-                switch (curInstance.treeType.Value)
-                {
-                    case Tree.bushyTree: // Oak
-                        evalTreeTexture("TextureOak");
-                        break;
-                    case Tree.leafyTree: // Maple
-                        evalTreeTexture("TextureMaple");
-                        break;
-                    case Tree.pineTree: // Pine
-                        evalTreeTexture("TexturePine");
-                        break;
-                    case Tree.greenRainTreeBushy: // Green Rain Type 1
-                        evalTreeTexture("Texture1");
-                        break;
-                    case Tree.greenRainTreeLeafy: // Green Rain Type 2
-                        evalTreeTexture("Texture2");
-                        break;
-                    default:
-                        if (mossData[modDict["custom_moss"]].ContainsKey("Texture" + curInstance.treeType.Value))
-                        {
-                            evalTreeTexture("Texture" + curInstance.treeType.Value);
-                        }
-                        else dealWithRectangle();
-                        break;
-                }
-            }
-        }
-        
-        spriteBatch.Draw(texture, position, sourceRectangle, color, rotation, origin, scale, effects,
-            layerDepth);
-    }
-    
-    /*
-    public static void RockDraw(SpriteBatch spriteBatch, Texture2D texture, Vector2 position,
-        Rectangle? sourceRectangle, Color color, float rotation, Vector2 origin, float scale, SpriteEffects effects,
-        float layerDepth, Object curInstance)
-    {
-        string stoneUID = "aceynk.CustomMoss/Stone";
-        if (curInstance.modData.ContainsKey(stoneUID)) {
-            Dictionary<string, string> modDict = helper.DecodeModData(curInstance.modData[stoneUID]);
-            Dictionary<string, Dictionary<string, string>> mossData =
-                Game1.content.Load<Dictionary<string, Dictionary<string, string>>>(stoneUID);
-
-            if (!mossData.ContainsKey(modDict["current_moss"]))
-            {
-                modDict["current_moss"] = "null";
-            }
-            
-            if (modDict["current_moss"] != "null" && mossData[modDict["current_moss"]].ContainsKey("Texture"))
-            {
-                Rectangle tempRect;
-                Texture2D tempTexture;
-    
-                switch (curInstance.QualifiedItemId)
-                {
-                    case "(O)343":
-                        tempTexture = Game1.content.Load<Texture2D>(mossData[modDict["current_moss"]]["Texture"]);
-                        tempRect = new Rectangle(0, 0, 16, 16);
-                        if (!mossData[modDict["current_moss"]].ContainsKey("SpriteIndex343")) break;
-                        tempRect.X += 16 * int.Parse(mossData[modDict["current_moss"]]["SpriteIndex343"]);
-                        texture = tempTexture;
-                        sourceRectangle = tempRect;
-                        position.Y -= 16;
-                        break;
-                    case "(O)450":
-                        tempTexture = Game1.content.Load<Texture2D>(mossData[modDict["current_moss"]]["Texture"]);
-                        tempRect = new Rectangle(0, 0, 16, 16);
-                        if (!mossData[modDict["current_moss"]].ContainsKey("SpriteIndex450")) break;
-                        tempRect.X += 16 * int.Parse(mossData[modDict["current_moss"]]["SpriteIndex450"]);
-                        texture = tempTexture;
-                        sourceRectangle = tempRect;
-                        position.Y -= 16;
-                        break;
-                }
-            }
-        }
-
-        spriteBatch.Draw(texture, position, sourceRectangle, color, rotation, origin, scale, effects, layerDepth);
-    }
-    */
 }
 
 
