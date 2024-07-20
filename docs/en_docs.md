@@ -46,13 +46,14 @@ I recommend using CP's ``{{Season}}`` token to change the texture of trees acros
 
 Valid tree ids are:
 
-| Tree                       | Id   |
-|----------------------------|------|
-| Oak                        | "1"  |
-| Maple                      | "2"  |
-| Pine                       | "3"  |
-| GreenRainTreeType1 (Bushy) | "10" |
-| GreenRainTreeType2 (Leafy) | "11" |
+| Tree                                               | Id                                        |
+|----------------------------------------------------|-------------------------------------------|
+| Oak                                                | "1"                                       |
+| Maple                                              | "2"                                       |
+| Pine                                               | "3"                                       |
+| GreenRainTreeType1 (Bushy)                         | "10"                                      |
+| GreenRainTreeType2 (Leafy)                         | "11"                                      |
+| Other trees (untested)<br/>Custom trees (untested) | Their respective TreeType ids as strings. |
 
 
 ## Stones

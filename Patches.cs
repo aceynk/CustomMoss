@@ -6,7 +6,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Netcode;
 using StardewValley;
-using StardewValley.Delegates;
 using StardewValley.Extensions;
 using StardewValley.TerrainFeatures;
 using Object = StardewValley.Object;
@@ -123,7 +122,7 @@ public class Tree_dayUpdate_Patches
                 continue;
             }
 
-            if (rnd.NextBool(int.Parse(mossData[mossId]["Chance"])))
+            if (rnd.NextBool(float.Parse(mossData[mossId]["Chance"])))
             {
                 modDict["current_moss"] = mossId;
                 if (!Config.VanillaMossOverrides)
@@ -373,7 +372,7 @@ public class Object_dayUpdate_Patches
                     continue;
                 }
 
-                if (rnd.NextBool(int.Parse(mossData[mossId]["Chance"])))
+                if (rnd.NextBool(float.Parse(mossData[mossId]["Chance"])))
                 {
                     modDict["current_moss"] = mossId;
                 }
@@ -477,6 +476,9 @@ public class Object_performRemoveAction_Patches
                     int.Parse(mossData[mossId]["MaxAmount"])
                 )
             );
+            
+            Game1.player.gainExperience(Farmer.foragingSkill, outItem.Stack * int.Parse(mossData[mossId]["Experience"]));
+            
                 
             // modified from decompiled game vv
             GameLocation location = __instance.Location ?? Game1.currentLocation;
