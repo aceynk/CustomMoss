@@ -6,5 +6,8 @@
   "UniqueID": "aceynk.CustomMoss",
   "EntryDll": "CustomMoss.dll",
   "MinimumApiVersion": "4.0.0",
-  "UpdateKeys": []
+  "UpdateKeys": [
+    "Nexus:26220",
+    "Github:aceynk/CustomMoss"
+  ]
 }
