@@ -37,17 +37,16 @@ public class ModEntry : Mod
          *
          * {
          *      "MossId": {
-         *          "QualifiedItemId": <q id>,              [Implemented]
          *          "DropWhenShaken": <bool>,
-         *          "ValidSeasons": <list<string>>,         [Implemented]
+         *          "ValidSeasons": <GSQ>,                  [Implemented]
          *          "ValidTrees": <list<string>>,           [Implemented]
          *          "MaxAmount": <int>,                     [Implemented]
          *          "MinAmount": <int>,                     [Implemented]
-         *          "TextureOak_<season>": <texture fp>,    [Implemented]
-         *          "TextureMaple_<season>": <texture fp>,  [Implemented]
-         *          "TexturePine_<season>": <texture fp>,   [Implemented]
-         *          "Texture1_<season>": <texture fp>,      [Implemented]
-         *          "Texture2_<season>": <texture fp>,      [Implemented]
+         *          "TextureOak": <texture fp>,             [Implemented]
+         *          "TextureMaple": <asset>,                [Implemented]
+         *          "TexturePine": <asset>,                 [Implemented]
+         *          "Texture1": <asset>,                    [Implemented]
+         *          "Texture2": <asset>,                    [Implemented]
          *          "Chance": <int>,                        [Implemented]
          *          "Experience": <int>                     [Implemented]
          *      }

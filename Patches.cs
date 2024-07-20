@@ -6,6 +6,8 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Netcode;
 using StardewValley;
+using StardewValley.Delegates;
+using StardewValley.Extensions;
 using StardewValley.TerrainFeatures;
 using Object = StardewValley.Object;
 using Vector2 = Microsoft.Xna.Framework.Vector2;
@@ -90,7 +92,8 @@ public class Tree_dayUpdate_Patches
 
 
         if (modDict["current_moss"] != "null" && mossData[modDict["current_moss"]].ContainsKey("ValidSeasons") &&
-            !helper.ParseAsList(mossData[modDict["current_moss"]]["ValidSeasons"]).Contains(Game1.currentSeason)) 
+            !GameStateQuery.CheckConditions(mossData[modDict["current_moss"]]["ValidSeasons"], Game1.currentLocation,
+                Game1.player)) 
         {
             modDict["current_moss"] = "null";
         }
@@ -107,8 +110,8 @@ public class Tree_dayUpdate_Patches
         {
             if (modDict["current_moss"] != "null") break;
 
-            if (mossData[mossId].ContainsKey("ValidSeasons") && !helper
-                    .ParseAsList(mossData[mossId]["ValidSeasons"]).Contains(Game1.currentSeason)) 
+            if (mossData[mossId].ContainsKey("ValidSeasons") &&
+                !GameStateQuery.CheckConditions(mossData[modDict["current_moss"]]["ValidSeasons"]))  
             {
                 continue;
             }
@@ -120,7 +123,7 @@ public class Tree_dayUpdate_Patches
                 continue;
             }
 
-            if (rnd.Next(0, 1000) < int.Parse(mossData[mossId]["Chance"]))
+            if (rnd.NextBool(int.Parse(mossData[mossId]["Chance"])))
             {
                 modDict["current_moss"] = mossId;
                 if (!Config.VanillaMossOverrides)
@@ -165,7 +168,7 @@ public class Tree_performToolAction_Patches
                 string mossId = modDict["current_moss"];
                 
                 Item outItem = ItemRegistry.Create(
-                    mossData[mossId]["QualifiedItemId"], 
+                    mossId, 
                     amount: rnd.Next(
                         int.Parse(mossData[mossId]["MinAmount"]), 
                         int.Parse(mossData[mossId]["MaxAmount"])
@@ -237,7 +240,7 @@ public class Tree_draw_Patches
             .Insert(
                 new CodeInstruction(OpCodes.Ldarg_0),
                 new CodeInstruction(OpCodes.Call,
-                    AccessTools.Method(typeof(TranspilerSupplementary), nameof(TranspilerSupplementary.StumpDrawOne)))
+                    AccessTools.Method(typeof(TranspilerSupplementary), nameof(TranspilerSupplementary.StumpDraw)))
             );
 
         return cMatcher.InstructionEnumeration();
@@ -256,7 +259,7 @@ public class TranspilerSupplementary
         {
             Dictionary<string, string> modDict = helper.DecodeModData(curInstance.modData[treeUID]);
             Dictionary<string, Dictionary<string, string>> mossData =
-                Game1.content.Load<Dictionary<string, Dictionary<string, string>>>("aceynk.CustomMoss/Tree");
+                Game1.content.Load<Dictionary<string, Dictionary<string, string>>>(treeUID);
 
             void dealWithRectangle()
             {
@@ -279,24 +282,6 @@ public class TranspilerSupplementary
                     dealWithRectangle();
                 }
             }
-
-            void seasonSwitch(string textureKey)
-            {
-                switch (Game1.season)
-                {
-                    case Season.Spring:
-                        evalTreeTexture(textureKey + "_spring");
-                        break;
-                    case Season.Summer:
-                        evalTreeTexture(textureKey + "_summer");
-                        break;
-                    case Season.Fall:
-                        evalTreeTexture(textureKey + "_fall");
-                        break;
-                    case Season.Winter:
-                        break;
-                }
-            }
             
             if (!mossData.ContainsKey(modDict["current_moss"]))
             {
@@ -308,22 +293,26 @@ public class TranspilerSupplementary
                 switch (curInstance.treeType.Value)
                 {
                     case Tree.bushyTree: // Oak
-                        seasonSwitch("TextureOak");
+                        evalTreeTexture("TextureOak");
                         break;
                     case Tree.leafyTree: // Maple
-                        seasonSwitch("TextureMaple");
+                        evalTreeTexture("TextureMaple");
                         break;
                     case Tree.pineTree: // Pine
-                        seasonSwitch("TexturePine");
+                        evalTreeTexture("TexturePine");
                         break;
                     case Tree.greenRainTreeBushy: // Green Rain Type 1
-                        seasonSwitch("Texture1");
+                        evalTreeTexture("Texture1");
                         break;
                     case Tree.greenRainTreeLeafy: // Green Rain Type 2
-                        seasonSwitch("Texture2");
+                        evalTreeTexture("Texture2");
                         break;
                     default:
-                        dealWithRectangle();
+                        if (mossData[modDict["custom_moss"]].ContainsKey("Texture" + curInstance.treeType.Value))
+                        {
+                            evalTreeTexture("Texture" + curInstance.treeType.Value);
+                        }
+                        else dealWithRectangle();
                         break;
                 }
             }
@@ -333,7 +322,7 @@ public class TranspilerSupplementary
                 layerDepth);
     }
     
-    public static void StumpDrawOne(SpriteBatch spriteBatch, Texture2D texture, Vector2 position,
+    public static void StumpDraw(SpriteBatch spriteBatch, Texture2D texture, Vector2 position,
         Rectangle? sourceRectangle, Color color, float rotation, Vector2 origin, float scale, SpriteEffects effects,
         float layerDepth, Tree curInstance)
     {
@@ -343,7 +332,7 @@ public class TranspilerSupplementary
         {
             Dictionary<string, string> modDict = helper.DecodeModData(curInstance.modData[treeUID]);
             Dictionary<string, Dictionary<string, string>> mossData =
-                Game1.content.Load<Dictionary<string, Dictionary<string, string>>>("aceynk.CustomMoss/Tree");
+                Game1.content.Load<Dictionary<string, Dictionary<string, string>>>(treeUID);
             
             void dealWithRectangle()
             {
@@ -367,24 +356,6 @@ public class TranspilerSupplementary
                 }
             }
             
-            void seasonSwitch(string textureKey)
-            {
-                switch (Game1.season)
-                {
-                    case Season.Spring:
-                        evalTreeTexture(textureKey + "_spring");
-                        break;
-                    case Season.Summer:
-                        evalTreeTexture(textureKey + "_summer");
-                        break;
-                    case Season.Fall:
-                        evalTreeTexture(textureKey + "_fall");
-                        break;
-                    case Season.Winter:
-                        break;
-                }
-            }
-            
             if (!mossData.ContainsKey(modDict["current_moss"]))
             {
                 modDict["current_moss"] = "null";
@@ -397,22 +368,26 @@ public class TranspilerSupplementary
                 switch (curInstance.treeType.Value)
                 {
                     case Tree.bushyTree: // Oak
-                        seasonSwitch("TextureOak");
+                        evalTreeTexture("TextureOak");
                         break;
                     case Tree.leafyTree: // Maple
-                        seasonSwitch("TextureMaple");
+                        evalTreeTexture("TextureMaple");
                         break;
                     case Tree.pineTree: // Pine
-                        seasonSwitch("TexturePine");
+                        evalTreeTexture("TexturePine");
                         break;
                     case Tree.greenRainTreeBushy: // Green Rain Type 1
-                        seasonSwitch("Texture1");
+                        evalTreeTexture("Texture1");
                         break;
                     case Tree.greenRainTreeLeafy: // Green Rain Type 2
-                        seasonSwitch("Texture2");
+                        evalTreeTexture("Texture2");
                         break;
                     default:
-                        dealWithRectangle();
+                        if (mossData[modDict["custom_moss"]].ContainsKey("Texture" + curInstance.treeType.Value))
+                        {
+                            evalTreeTexture("Texture" + curInstance.treeType.Value);
+                        }
+                        else dealWithRectangle();
                         break;
                 }
             }
@@ -502,8 +477,8 @@ public class Object_dayUpdate_Patches
         {
             if (modDict["current_moss"] != "null")
             {
-                if (mossData[modDict["current_moss"]].ContainsKey("ValidSeasons") && !helper
-                        .ParseAsList(mossData[modDict["current_moss"]]["ValidSeasons"]).Contains(Game1.currentSeason))
+                if (mossData[modDict["current_moss"]].ContainsKey("ValidSeasons") &&
+                    !GameStateQuery.CheckConditions(mossData[modDict["current_moss"]]["ValidSeasons"])) 
                 {
                     modDict["current_moss"] = "null";
                 }
@@ -519,7 +494,7 @@ public class Object_dayUpdate_Patches
                     continue;
                 }
 
-                if (rnd.Next(0, 1000) < int.Parse(mossData[mossId]["Chance"]))
+                if (rnd.NextBool(int.Parse(mossData[mossId]["Chance"])))
                 {
                     modDict["current_moss"] = mossId;
                 }
@@ -558,7 +533,7 @@ public class Object_performToolAction_Patches
         {
             string mossId = modDict["current_moss"];
             Item outItem = ItemRegistry.Create(
-                mossData[mossId]["QualifiedItemId"], 
+                mossId, 
                 amount: rnd.Next(
                     int.Parse(mossData[mossId]["MinAmount"]), 
                     int.Parse(mossData[mossId]["MaxAmount"])
@@ -617,7 +592,7 @@ public class Object_performRemoveAction_Patches
         {
             string mossId = modDict["current_moss"];
             Item outItem = ItemRegistry.Create(
-                mossData[mossId]["QualifiedItemId"], 
+                mossId, 
                 amount: rnd.Next(
                     int.Parse(mossData[mossId]["MinAmount"]), 
                     int.Parse(mossData[mossId]["MaxAmount"])
