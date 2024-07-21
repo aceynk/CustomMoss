@@ -1,5 +1,6 @@
 ﻿using GenericModConfigMenu;
 using HarmonyLib;
+using ScytheToolEnchantments;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley.Minigames;
@@ -15,6 +16,7 @@ public class ModEntry : Mod
 
     public static IMonitor _log = null!;
     public static ModConfig Config;
+    public static IScytheToolEnchantmentsApi? ScytheAPI;
 
     public override void Entry(IModHelper helper)
     {
@@ -24,9 +26,17 @@ public class ModEntry : Mod
         var harmony = new Harmony(ModManifest.UniqueID);
 
         Helper.Events.Content.AssetRequested += OnAssetRequested;
+        Helper.Events.GameLoop.GameLaunched += OnGameLaunched;
         Helper.Events.GameLoop.GameLaunched += InitConfig;
         
         harmony.PatchAll();
+    }
+
+    private void OnGameLaunched(object? sender, GameLaunchedEventArgs e)
+    {
+        if (!Helper.ModRegistry.IsLoaded("mushymato.ScytheToolEnchantments")) return;
+
+        ScytheAPI = Helper.ModRegistry.GetApi<IScytheToolEnchantmentsApi>("mushymato.ScytheToolEnchantments");
     }
     
     private static void OnAssetRequested(object? sender, AssetRequestedEventArgs e)

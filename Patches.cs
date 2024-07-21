@@ -49,7 +49,7 @@ public class Tree_dayUpdate_Patches
     public static void Postfix(Tree __instance)
     {
         string treeUID = "aceynk.CustomMoss/Tree";
-        Random rnd = new();
+        Random rnd = Random.Shared;
         Dictionary<string, Dictionary<string, string>> mossData = Game1.content.Load<Dictionary<string, Dictionary<string, string>>>(treeUID);
 
         if (!__instance.modData.ContainsKey(treeUID))
@@ -153,7 +153,7 @@ public class Tree_performToolAction_Patches
         
         Dictionary<string, string> modDict = helper.DecodeModData(__instance.modData[treeUID]);
         Dictionary<string, Dictionary<string, string>> mossData = Game1.content.Load<Dictionary<string, Dictionary<string, string>>>("aceynk.CustomMoss/Tree");
-        Random rnd = new();
+        Random rnd = Random.Shared;
         
         if (__instance.growthStage.Value >= 5)
         {
@@ -165,13 +165,22 @@ public class Tree_performToolAction_Patches
             if (modDict["current_moss"] != "null")
             {
                 string mossId = modDict["current_moss"];
+
+                int amountBonus = 0;
+
+                if (ModEntry.ScytheAPI != null
+                    && ModEntry.ScytheAPI.HasGathererEnchantment(t)
+                    && Random.Shared.NextBool())
+                {
+                    amountBonus = 1;
+                }
                 
                 Item outItem = ItemRegistry.Create(
                     mossId, 
                     amount: rnd.Next(
                         int.Parse(mossData[mossId]["MinAmount"]), 
-                        int.Parse(mossData[mossId]["MaxAmount"])
-                    )
+                        int.Parse(mossData[mossId]["MaxAmount"]) + 1
+                    ) + amountBonus
                 );
 
                 // modified from decompiled game
@@ -337,7 +346,7 @@ public class Object_dayUpdate_Patches
     public static void Postfix(Object __instance)
     {
         string stoneUID = "aceynk.CustomMoss/Stone";
-        Random rnd = new();
+        Random rnd = Random.Shared;
         Dictionary<string, Dictionary<string, string>> mossData =
             Game1.content.Load<Dictionary<string, Dictionary<string, string>>>(stoneUID);
             
@@ -400,7 +409,7 @@ public class Object_performToolAction_Patches
         
         Dictionary<string, string> modDict = helper.DecodeModData(__instance.modData[stoneUID]);
         Dictionary<string, Dictionary<string, string>> mossData = Game1.content.Load<Dictionary<string, Dictionary<string, string>>>(stoneUID);
-        Random rnd = new();
+        Random rnd = Random.Shared;
         
         if (!mossData.ContainsKey(modDict["current_moss"]))
         {
@@ -410,12 +419,22 @@ public class Object_performToolAction_Patches
         if (modDict["current_moss"] != "null")
         {
             string mossId = modDict["current_moss"];
+            
+            int amountBonus = 0;
+
+            if (ModEntry.ScytheAPI != null
+                && ModEntry.ScytheAPI.HasGathererEnchantment(t)
+                && Random.Shared.NextBool())
+            {
+                amountBonus = 1;
+            }
+            
             Item outItem = ItemRegistry.Create(
                 mossId, 
                 amount: rnd.Next(
                     int.Parse(mossData[mossId]["MinAmount"]), 
-                    int.Parse(mossData[mossId]["MaxAmount"])
-                )
+                    int.Parse(mossData[mossId]["MaxAmount"]) + 1
+                ) + amountBonus
             );
 
             // modified from decompiled game
@@ -459,7 +478,7 @@ public class Object_performRemoveAction_Patches
         
         Dictionary<string, string> modDict = helper.DecodeModData(__instance.modData[stoneUID]);
         Dictionary<string, Dictionary<string, string>> mossData = Game1.content.Load<Dictionary<string, Dictionary<string, string>>>(stoneUID);
-        Random rnd = new();
+        Random rnd = Random.Shared;
         
         if (!mossData.ContainsKey(modDict["current_moss"]))
         {
@@ -469,12 +488,22 @@ public class Object_performRemoveAction_Patches
         if (modDict["current_moss"] != "null")
         {
             string mossId = modDict["current_moss"];
+            
+            int amountBonus = 0;
+
+            if (ModEntry.ScytheAPI != null
+                && ModEntry.ScytheAPI.HasGathererEnchantment(Game1.player.CurrentTool)
+                && Random.Shared.NextBool())
+            {
+                amountBonus = 1;
+            }
+            
             Item outItem = ItemRegistry.Create(
                 mossId, 
                 amount: rnd.Next(
                     int.Parse(mossData[mossId]["MinAmount"]), 
-                    int.Parse(mossData[mossId]["MaxAmount"])
-                )
+                    int.Parse(mossData[mossId]["MaxAmount"]) + 1
+                ) + amountBonus
             );
             
             Game1.player.gainExperience(Farmer.foragingSkill, outItem.Stack * int.Parse(mossData[mossId]["Experience"]));
