@@ -23,19 +23,19 @@ New moss variants can be made to grown on trees by targeting the asset ``"aceynk
 This asset is a dictionary where the key is the qualified item id of the moss that should be growing on the tree,
 and the value is a model matching the following:
 
-| Field                     | Type   | Description                                                                                                                    |
-|---------------------------|--------|--------------------------------------------------------------------------------------------------------------------------------|
-| GrowConditions            | string | A GSQ referencing the valid state for this moss to grow in.<br/>See: https://stardewvalleywiki.com/Modding:Game_state_queries. |
-| ValidTrees                | string | A list of tree ids, separated with commas. See [Tree Ids](#tree-ids).                                                          |
-| MaxAmount                 | int    | The maximum amount of items to drop upon harvest.                                                                              |
-| MinAmount                 | int    | The minimum amount of items to drop upon harvest.                                                                              |
-| Chance                    | float  | The chance, per day, of this moss growing on a tree. Between 0 and 1.                                                          |
-| Experience                | int    | How much foraging experience, per moss item, to award upon harvest.                                                            |
-| TextureOak                | string | The texture asset for oak trees that have this moss.                                                                           |
-| TextureMaple              | string | The texture asset for maple trees that have this moss.                                                                         |
-| TexturePine               | string | The texture asset for pine trees that have this moss.                                                                          |
-| Texture1                  | string | The texture asset for green rain type 1 trees that have this moss.                                                             |
-| Texture2                  | string | The texture asset for green rain type 2 trees that have this moss.                                                             |
+| Field                      | Type   | Description                                                                                                                    |
+|----------------------------|--------|--------------------------------------------------------------------------------------------------------------------------------|
+| GrowConditions             | string | A GSQ referencing the valid state for this moss to grow in.<br/>See: https://stardewvalleywiki.com/Modding:Game_state_queries. |
+| ValidTrees                 | string | A list of tree ids, separated with commas. See [Tree Ids](#tree-ids).                                                          |
+| MaxAmount                  | int    | The maximum amount of items to drop upon harvest.                                                                              |
+| MinAmount                  | int    | The minimum amount of items to drop upon harvest.                                                                              |
+| Chance                     | float  | The chance, per day, of this moss growing on a tree. Between 0 and 1.                                                          |
+| Experience                 | int    | How much foraging experience, per moss item, to award upon harvest.                                                            |
+| TextureOak                 | string | The texture asset for oak trees that have this moss.                                                                           |
+| TextureMaple               | string | The texture asset for maple trees that have this moss.                                                                         |
+| TexturePine                | string | The texture asset for pine trees that have this moss.                                                                          |
+| Texture1                   | string | The texture asset for green rain type 1 trees that have this moss.                                                             |
+| Texture2                   | string | The texture asset for green rain type 2 trees that have this moss.                                                             |
 | Texture\<CustomWildTreeId> | string | The texture asset for instances of the custom wild tree that have this moss.                                                   |
 
 If textures are not given for the wild tree moss, it defaults to the vanilla moss texture.
