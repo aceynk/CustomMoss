@@ -4,6 +4,10 @@ CustomMoss is a framework (does nothing to the game on its own) for Stardew Vall
 
 For modders, please see the documentation: https://github.com/aceynk/CustomMoss/blob/main/docs/en_docs.md
 
+## Compatibility
+
+As of v1.0.1, there is compatibility with Scythe Tool Enchantments' Gatherer enchantment. See: https://www.nexusmods.com/stardewvalley/mods/26217.
+
 ## Dependencies
 
 CustomMoss entirely depends on the Stardew Modding API (SMAPI).
