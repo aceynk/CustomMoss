@@ -36,7 +36,7 @@ and the value is a model matching the following:
 | TexturePine               | string | The texture asset for pine trees that have this moss.                                                                          |
 | Texture1                  | string | The texture asset for green rain type 1 trees that have this moss.                                                             |
 | Texture2                  | string | The texture asset for green rain type 2 trees that have this moss.                                                             |
-| Texture<CustomWildTreeId> | string | The texture asset for instances of the custom wild tree that have this moss.                                                   |
+| Texture\<CustomWildTreeId> | string | The texture asset for instances of the custom wild tree that have this moss.                                                   |
 
 If textures are not given for the wild tree moss, it defaults to the vanilla moss texture.
 
