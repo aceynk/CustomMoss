@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.3
+
+Fixed another crash, this time with invalid dict keys.
+
 ## 1.0.2
 
 Fixed crash with invalid assets.

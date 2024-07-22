@@ -110,7 +110,7 @@ public class Tree_dayUpdate_Patches
             if (modDict["current_moss"] != "null") break;
 
             if (mossData[mossId].ContainsKey("GrowConditions") &&
-                !GameStateQuery.CheckConditions(mossData[modDict["current_moss"]]["GrowConditions"]))  
+                !GameStateQuery.CheckConditions(mossData[mossId]["GrowConditions"]))  
             {
                 continue;
             }
