@@ -90,8 +90,8 @@ public class Tree_dayUpdate_Patches
         }
 
 
-        if (modDict["current_moss"] != "null" && mossData[modDict["current_moss"]].ContainsKey("ValidSeasons") &&
-            !GameStateQuery.CheckConditions(mossData[modDict["current_moss"]]["ValidSeasons"], Game1.currentLocation,
+        if (modDict["current_moss"] != "null" && mossData[modDict["current_moss"]].ContainsKey("GrowConditions") &&
+            !GameStateQuery.CheckConditions(mossData[modDict["current_moss"]]["GrowConditions"], Game1.currentLocation,
                 Game1.player)) 
         {
             modDict["current_moss"] = "null";
@@ -109,8 +109,8 @@ public class Tree_dayUpdate_Patches
         {
             if (modDict["current_moss"] != "null") break;
 
-            if (mossData[mossId].ContainsKey("ValidSeasons") &&
-                !GameStateQuery.CheckConditions(mossData[modDict["current_moss"]]["ValidSeasons"]))  
+            if (mossData[mossId].ContainsKey("GrowConditions") &&
+                !GameStateQuery.CheckConditions(mossData[modDict["current_moss"]]["GrowConditions"]))  
             {
                 continue;
             }
@@ -372,8 +372,8 @@ public class Object_dayUpdate_Patches
         {
             if (modDict["current_moss"] != "null")
             {
-                if (mossData[modDict["current_moss"]].ContainsKey("ValidSeasons") &&
-                    !GameStateQuery.CheckConditions(mossData[modDict["current_moss"]]["ValidSeasons"])) 
+                if (mossData[modDict["current_moss"]].ContainsKey("GrowConditions") &&
+                    !GameStateQuery.CheckConditions(mossData[modDict["current_moss"]]["GrowConditions"])) 
                 {
                     modDict["current_moss"] = "null";
                 }
@@ -383,8 +383,8 @@ public class Object_dayUpdate_Patches
             {
                 if (modDict["current_moss"] != "null") break;
 
-                if (mossData[mossId].ContainsKey("ValidSeasons") && !helper
-                        .ParseAsList(mossData[mossId]["ValidSeasons"]).Contains(Game1.currentSeason)) 
+                if (mossData[mossId].ContainsKey("GrowConditions") && !helper
+                        .ParseAsList(mossData[mossId]["GrowConditions"]).Contains(Game1.currentSeason)) 
                 {
                     continue;
                 }
