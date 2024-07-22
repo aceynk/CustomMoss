@@ -1,7 +1,7 @@
 {
   "Name": "CustomMoss",
   "Author": "aceynk",
-  "Version": "1.0.1",
+  "Version": "1.0.2",
   "Description": "A framework allowing for custom moss on trees and rocks.",
   "UniqueID": "aceynk.CustomMoss",
   "EntryDll": "CustomMoss.dll",

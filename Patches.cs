@@ -286,7 +286,15 @@ public class TranspilerSupplementary
             {
                 if (mossData[modDict["current_moss"]].ContainsKey(textureKey))
                 {
-                    textureValue = Game1.content.Load<Texture2D>(mossData[modDict["current_moss"]][textureKey]);
+                    try
+                    {
+                        textureValue = Game1.content.Load<Texture2D>(mossData[modDict["current_moss"]][textureKey]);
+                    }
+                    catch
+                    {
+                        ModEntry._log.Log($"Failed to load the {textureKey} asset. Defaulting to vanilla sprites if possible.");
+                        dealWithRectangle();
+                    }
                 }
                 else
                 {

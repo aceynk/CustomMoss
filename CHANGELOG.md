@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.2
+
+Fixed crash with invalid assets.
+
 ## 1.0.1
 
 Added compatibility with ScytheToolEnchantments.
