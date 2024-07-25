@@ -340,6 +340,20 @@ public class TranspilerSupplementary
         spriteBatch.Draw(textureValue, position, sourceRectangle, color, rotation, origin, scale, effects,
                 layerDepth);
     }
+
+    public static bool MushroomLog_hasMoss(Tree t)
+    {
+        string treeUID = "aceynk.CustomMoss/Tree";
+
+        if (t.modData.ContainsKey(treeUID))
+        {
+            Dictionary<string, string> modDict = helper.DecodeModData(t.modData[treeUID]);
+
+            return modDict["current_moss"] != "null";
+        }
+
+        return t.hasMoss.Value;
+    }
 }
 
 
@@ -578,5 +592,34 @@ public class Object_draw_Patches
                     depth);
                 break;
         }
+    }
+}
+
+///////////////////////
+//// MUSHROOM LOGS ////
+///////////////////////
+
+[HarmonyPatch(typeof(Object), nameof(Object.OutputMushroomLog))]
+public class Object_OutputMushroomLog
+{
+    public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
+    {
+        CodeMatcher cMatcher = new(instructions);
+
+        cMatcher.MatchEndForward(
+                new CodeMatch(OpCodes.Ldstr, "(O)422"),
+                new CodeMatch(OpCodes.Stloc_S, 12f),
+                new CodeMatch(OpCodes.Ldloc_2),
+                new CodeMatch(OpCodes.Ldloc_S, 12f),
+                new CodeMatch(OpCodes.Callvirt, AccessTools.Method(typeof(List<string>), nameof(List<string>.Add)))
+            )
+            .ThrowIfNotMatch("Couldn't find transpiler start position for Object.OutputMushroomLog patch.")
+            .Advance(2)
+            .RemoveInstructions(2)
+            .Insert(
+                new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(TranspilerSupplementary), nameof(TranspilerSupplementary.MushroomLog_hasMoss)))
+            );
+
+        return cMatcher.InstructionEnumeration();
     }
 }
