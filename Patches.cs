@@ -608,9 +608,9 @@ public class Object_OutputMushroomLog
 
         cMatcher.MatchEndForward(
                 new CodeMatch(OpCodes.Ldstr, "(O)422"),
-                new CodeMatch(OpCodes.Stloc_S, 12f),
+                new CodeMatch(OpCodes.Stloc_S, 12),
                 new CodeMatch(OpCodes.Ldloc_2),
-                new CodeMatch(OpCodes.Ldloc_S, 12f),
+                new CodeMatch(OpCodes.Ldloc_S, 12),
                 new CodeMatch(OpCodes.Callvirt, AccessTools.Method(typeof(List<string>), nameof(List<string>.Add)))
             )
             .ThrowIfNotMatch("Couldn't find transpiler start position for Object.OutputMushroomLog patch.")
